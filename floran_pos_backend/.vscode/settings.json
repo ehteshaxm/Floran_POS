@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": "C:\\Users\\User\\Envs\\reactdj\\Scripts\\python.exe",
+    "emmet.preferences": {
+    
+    },
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+     }
+}
