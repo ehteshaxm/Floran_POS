@@ -328,6 +328,28 @@ section .content .button:hover {
   margin-top: 30px;
 }
 
+.scrollableDiv{
+  flex: 1; /* So it fills the available vertical space */
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto; /* Only vertical scroll appears, only if needed */
+  margin: 0;
+  /* padding-bottom: 100px; */
+  padding-right: 10px !important;
+  max-height: 80vh;
+  /* background-color: #576e75; */
+}
+.scrollableDiv::-webkit-scrollbar {
+  width: 0.1rem;
+}
+
+.scrollableDiv::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.scrollableDiv::-webkit-scrollbar-thumb {
+  background: #972853;
+}
 .link{
   color: #1f1f1f;
   margin-right: 10px;
@@ -349,6 +371,24 @@ section .content .button:hover {
   display: none;
 }
 
+.purchase_entiry_card{
+  min-height: 95vh !important;
+  width: inherit;
+  /* position: fixed; */
+  /* width: 100%; */
+  /* border: 1px solid #000; */
+}
+.css-nnbavb{
+  display: none !important;
+}
+.totalCardArea{
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  border-top: 1px solid #e6e6e6;
+  margin-top: 10px;
+  padding-top: 10px;
+}
 @media(max-width: 1024px) {
   section .bg{
     position: absolute;
@@ -365,9 +405,11 @@ section .content .button:hover {
   section .content h4{
     font-size: 1.7em;
   }
+
+  
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
   section .bg {
     position: absolute;
     top: 0;
@@ -376,6 +418,14 @@ section .content .button:hover {
     height: 100%;
     object-fit: cover;
     opacity: 0.5;
+  }
+
+  .purchase_entiry_card{
+    min-height: auto !important;
+  }
+
+  .totalCardArea{
+    position: relative;
   }
 }
 

@@ -19,7 +19,7 @@ export const getPurchase = () => (dispatch,getState) => {
 
 
 export const createPurchase = Bill => (dispatch,getState) => {
-    axios.post('/api/purchase/',Bill,tokenConfig(getState)).then(
+    axios.post(url,Bill,tokenConfig(getState)).then(
         res => {
             console.log(res.data)
         }

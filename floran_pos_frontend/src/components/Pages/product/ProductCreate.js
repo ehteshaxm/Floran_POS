@@ -8,45 +8,58 @@ export class ProductCreate extends Component {
         'product_name':'',
         'product_description':'',
         'product_quantity':0,
+        'product_type':'',
+        'product_weight_category':'',
+        'product_weight_per_quantity':0,
         'product_price':0,
-        'form_submitted':false
     }
 
     static propTypes = {
         createProduct: PropTypes.func.isRequired,
     }
 
-    onChange = (e) => this.setState({
-        [e.target.name]: e.target.value
-    });
+    onChange = (e) => 
+    {
+        console.log(e.target.name)
+        console.log(e.target.value)
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
 
-    onSubmit = e =>{
-        e.preventDefault();
-        var {product_name,product_description,product_quantity,product_price} = this.state;
-        product_quantity = parseInt(product_quantity)
-        product_price = parseInt(product_price)
-        if(product_name && product_description && product_quantity > 0 && product_price > 0){
-            const Product = {product_name,product_description,product_quantity,product_price}
-            this.props.createProduct(Product)
-            this.setState({
+    resetState = () => {
+        this.setState({
                 'product_name':'',
                 'product_description':'',
                 'product_quantity':0,
+                'product_type':'',
+                'product_weight_category':'',
+                'product_weight_per_quantity':0,
                 'product_price':0,
-                'form_submitted':true
             })
 
-            
+    }
+
+    onSubmit = async(e) =>{
+        e.preventDefault();
+        var {product_name,product_description,product_quantity,product_type,product_weight_category,product_weight_per_quantity,product_price} = this.state;
+        product_quantity = parseInt(product_quantity)
+        product_price = parseInt(product_price)
+        product_weight_per_quantity = parseInt(product_weight_per_quantity)
+        if(product_name && product_description && product_quantity > 0 && product_price > 0){
+            const Product = {product_name,product_description,product_quantity,product_type,product_weight_category,product_weight_per_quantity,product_price}
+            this.props.createProduct(Product)
         } else {
             alert('Fill the form correctly')
         }
     }
     
     render() {
-        const {product_name,product_description,product_quantity,product_price} = this.state;
-        const form_submitted = this.state.form_submitted
+        const {product_name,product_description,product_quantity,product_price,product_weight_per_quantity} = this.state;
 
-        if(form_submitted){
+        // check wheather product is created successfully or not
+        if(this.props.product_created){
+            this.resetState()
             return <Redirect to='/product' />
         }
 
@@ -86,6 +99,60 @@ export class ProductCreate extends Component {
                             </div>
                             <div className="form-group row">
                                 <label className="col-sm-3 col-form-label">
+                                    Product Type
+                                </label>
+                                <div className="col-sm-9">
+                                    <div onChange={this.onChange}>
+                                        <div className="form-check">
+                                            <input type="radio" className='form-check-input' name='product_type' value="edible"/>
+                                            <label className="form-check-label">Edible</label>
+                                        </div>
+                                        <div className="form-check">
+                                            <input type="radio" className='form-check-input' name='product_type' value="non-edible"/>
+                                            <label className="form-check-label">Non-Edible</label>
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-3 col-form-label">
+                                    Product Weight Type
+                                </label>
+                                <div className="col-sm-9">
+                                    <div onChange={this.onChange}>
+                                            <div className="form-check">
+                                                <input type="radio" className='form-check-input' name='product_weight_category' value="kilogram"/>
+                                                <label className="form-check-label">Kilogram</label>
+                                            </div>
+                                            <div className="form-check">
+                                                <input type="radio" className='form-check-input' name='product_weight_category' value="gram"/>
+                                                <label className="form-check-label">Gram</label>
+                                            </div>
+                                            <div className="form-check">
+                                                <input type="radio" className='form-check-input' name='product_weight_category' value="litre"/>
+                                                <label className="form-check-label">Litre</label>
+                                            </div>
+                                            <div className="form-check">
+                                                <input type="radio" className='form-check-input' name='product_weight_category' value="ml"/>
+                                                <label className="form-check-label">Mili-Litre</label>
+                                            </div>
+                                            <div className="form-check">
+                                                <input type="radio" className='form-check-input' name='product_weight_category' value="pieces"/>
+                                                <label className="form-check-label">Pieces</label>
+                                            </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-3 col-form-label">
+                                    Product Weight/Pieces per qty
+                                </label>
+                                <div className="col-sm-9">
+                                    <input type="number" className='form-control' name='product_weight_per_quantity' value={product_weight_per_quantity} onChange={this.onChange}/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-3 col-form-label">
                                     Product Price
                                 </label>
                                 <div className="col-sm-9">
@@ -106,4 +173,8 @@ export class ProductCreate extends Component {
     }
 }
 
-export default connect(null, {createProduct})(ProductCreate)
+const mapStateToProps = state => ({
+    product_created: state.product.product_created
+})
+
+export default connect(mapStateToProps, {createProduct})(ProductCreate)

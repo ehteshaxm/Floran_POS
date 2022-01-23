@@ -41,16 +41,16 @@ export class Navbar extends Component {
               </Link>
             </li>
             <li className="mainNav-item">
-              <a href="/restaurant/inventory" className="nav-link">
+              <Link to="/restaurant/inventory" className="nav-link">
                 <i className="fas fa-warehouse"></i>
                 <span className="link-text">Restaurant Inventory</span>
-              </a>
+              </Link>
             </li>
             <li className="mainNav-item">
-              <a href="/restaurant/order" className="nav-link">
+              <Link to="/restaurant/order" className="nav-link">
                 <i className="fas fa-pallet"></i>
                 <span className="link-text">Place Order</span>
-              </a>
+              </Link>
             </li>
             <li>
               <span className="nav-header">
@@ -64,28 +64,28 @@ export class Navbar extends Component {
               </Link>
             </li>
             <li className="mainNav-item">
-              <a href="/product" className="nav-link">
+              <Link to="/product" className="nav-link">
                 <i className="fab fa-product-hunt"></i>
                 <span className="link-text">Product Inventory</span>
-              </a>
+              </Link>
             </li>
             <li className="mainNav-item">
-              <a href="/supplier" className="nav-link">
+              <Link to="/supplier" className="nav-link">
                 <i className="far fa-handshake"></i>
                 <span className="link-text">Vendor</span>
-              </a>
+              </Link>
             </li>
             <li className="mainNav-item">
-              <a href="/purchase" className="nav-link">
+              <Link to="/purchase" className="nav-link">
                 <i className="fas fa-truck-moving"></i>
                 <span className="link-text">Purchase</span>
-              </a>
+              </Link>
             </li>
             <li className="mainNav-item">
-              <a href="/" className="nav-link">
+              <Link to="/" className="nav-link">
                 <i className="far fa-user"></i>
                 <span className="link-text">User</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

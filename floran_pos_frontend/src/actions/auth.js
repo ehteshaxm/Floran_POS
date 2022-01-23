@@ -126,24 +126,24 @@ export const logout = () => (dispatch,getState) => {
 }
 
 // register 
-export const register = ({ username, password , email}) => dispatch =>{
+export const register = Register => dispatch =>{
     //headers
     const config = {
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'mutlipart/form-data'
         }
     }
 
     //Request Body
 
-    const body = JSON.stringify({
-        username,
-        password,
-        email
-    })
+    // const body = JSON.stringify({
+    //     username,
+    //     password,
+    //     email
+    // })
    
 
-    axios.post(`${url}register/`,body,config)
+    axios.post(`${url}register`,Register,config)
     .then(res => {
         dispatch({
             type: REGISTER_SUCCESS,

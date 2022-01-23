@@ -88,7 +88,7 @@ class dashboard(APIView):
         for year in year_list:
             tmp1.append(allInStatePurchase.filter(date__year = year).count())
             tmp2.append(allOutStatePurchase.filter(date__year = year).count())
-        years_data.append(tmp1)
+        years_data.append(tmp1) 
         years_data.append(tmp2)
         # for month data
         tmp1 = []

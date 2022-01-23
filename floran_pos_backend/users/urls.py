@@ -4,7 +4,7 @@ from knox import views as knox_views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('hotel_detail/', hotelDetailAPI,'hotel_detail')
+router.register('hotel_detail', hotelDetailAPI,'hotel_detail')
 
 urlpatterns = [
     path('',include('knox.urls')),

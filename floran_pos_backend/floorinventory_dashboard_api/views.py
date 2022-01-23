@@ -28,6 +28,7 @@ class Dashboard_API(APIView):
         if startYear != currentYear:
             dayList = [i for i in range(
             1, calendar.monthrange(dt.today().year, dt.today().month)[1]+1)]
+            startDay = 1
         else:
             if startMonth ==  dt.today().month:
                 startDay = invtOrder.order_by('issued_on')[0].issued_on.day

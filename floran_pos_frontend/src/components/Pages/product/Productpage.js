@@ -54,6 +54,9 @@ export class Productpage extends Component {
                   <th>S/N</th>
                   <th>Name</th>
                   <th>Quantity</th>
+                  <th>Type</th>
+                  <th>Weight Type</th>
+                  <th>Weight per unit</th>
                   <th>Price</th>
                 </tr>
               </thead>
@@ -67,6 +70,9 @@ export class Productpage extends Component {
                     <td>{index + 1}</td>
                     <td>{product.product_name}</td>
                     <td>{product.product_quantity}</td>
+                    <td>{product.product_type}</td>
+                    <td>{product.product_weight_category}</td>
+                    <td>{product.product_weight_per_quantity}</td>
                     <td>{product.product_price}</td>
                   </tr>
                 ))}
