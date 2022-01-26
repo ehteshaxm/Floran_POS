@@ -1,3 +1,4 @@
+from math import prod
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions,status
@@ -27,100 +28,146 @@ class purchaseApi(APIView):
         newPrdsData = request.data['newPrds']
         prdsData  = request.data['prds']
 
-        # sup = supplier.objects.filter(id=supplier_id,user_linked=request.user).get()
-        # if sup:
-        try:
+        sup = supplier.objects.filter(id=supplier_id,user_linked=request.user).get()
+        if sup:
             print(prdsData)
             print(newPrdsData)
-        #         if request.data['bill_type'] == 'outstate':
-        #             purchase = AllOutStatePurchase(
-        #                 user = request.user,
-        #                 date = inv_date,
-        #                 supplier = sup,
-        #                 invNumber = inv_number,
-        #                 total_amount = grand_total
-        #             )
+            print(request.data['bill_type'])
+            try:
+                if request.data['bill_type'] == "outstate":
+                    purchase = AllOutStatePurchase(
+                        user = request.user,
+                        date = inv_date,
+                        supplier = sup,
+                        invNumber = inv_number,
+                        total_amount = grand_total
+                    )
 
-        #             purchase.save()
+                    purchase.save()
 
-        #             for i in data:
-        #                 prd = product.objects.filter(
-        #                     user_linked=request.user,
-        #                     product_name=i[0]
-        #                 )
+                    for i in prdsData:
 
-        #                 qty = prd[0].product_quantity if len(prd) != 0 else 0
+                        prd = product.objects.filter(
+                            user_linked = request.user,
+                            product_name = i[0]
+                        ).get()
 
+                        prd.product_quantity = prd.product_quantity + int(i[1])
+                        prd.product_price = float(i[2]) + ((float(i[2]) * int(i[3])) / 100)
 
-        #                 obj,created = product.objects.update_or_create(
-        #                     user_linked=request.user,
-        #                     product_name=i[0],
-        #                     product_description = '',
-        #                     defaults={
-        #                         'product_quantity':qty+int(i[1]),
-        #                         'product_price':float(i[2])
-        #                         }
-        #                 )
+                        prd.save()
+
+                        invPrd = OutStatePurchase(
+                            outstateInv = purchase,
+                            product = prd.product_name,
+                            product_price = float(i[2]),
+                            product_gst = str(i[3]),
+                            quantity = int(i[1]),
+                            total = float(i[4])
+
+                        )
+
+                        invPrd.save()
+
+                    for i in newPrdsData:
+
+                        prd = product(
+                            user_linked = request.user,
+                            product_name = i[0],
+                            product_description = i[5],
+                            product_quantity = int(i[1]),
+                            product_type = i[6],
+                            product_weight_category = i[7],
+                            product_weight_per_quantity = int(i[8]),
+                            product_price = float(i[2]) + ((float(i[2]) * int(i[3])) / 100)
+                        )
+
+                        prd.save()
+
+                        invPrd = OutStatePurchase(
+                            outstateInv = purchase,
+                            product = prd.product_name,
+                            product_price = float(i[2]),
+                            product_gst = str(i[3]),
+                            quantity = int(i[1]),
+                            total = float(i[4])
+
+                        )
+
+                        invPrd.save()
+
+                elif request.data["bill_type"] == "instate":
+                    
+                    purchase = AllinStatePurchase(
+                        user = request.user,
+                        date = inv_date,
+                        supplier = sup,
+                        invNumber = inv_number,
+                        total_amount = grand_total
+                    )
+
+                    purchase.save()
+
+                    for i in prdsData:
+
+                        prd = product.objects.filter(
+                            user_linked = request.user,
+                            product_name = i[0]
+                        ).get()
+
+                        print(prd)
+                        prd.product_quantity = prd.product_quantity + int(i[1])
+                        prd.product_price = float(i[2]) + ((float(i[2]) * int(i[3])) / 100) + ((float(i[2]) * int(i[4])) / 100)
                         
+                        print(prd)
+                        prd.save()
+                        print(prd)
 
-        #                 invProduct = OutStatePurchase(
-        #                     outstateInv = purchase,
-        #                     product = i[0],
-        #                     product_price = float(i[2]),
-        #                     product_gst = str(i[3]),
-        #                     quantity = int(i[1]),
-        #                     total = float(i[4])
-        #                 )
+                        invPrd = inStatePurchase(
+                            instateInv = purchase,
+                            product = i[0],
+                            product_price = float(i[2]),
+                            product_sgst = str(i[3]),
+                            product_cgst = str(i[4]),
+                            quantity = int(i[1]),
+                            total = float(i[5])
 
-        #                 invProduct.save()
-        #         elif request.data['bill_type'] == 'instate':
-        #             purchase = AllinStatePurchase(
-        #                 user = request.user,
-        #                 date = inv_date,
-        #                 supplier = sup,
-        #                 invNumber = inv_number,
-        #                 total_amount = grand_total
-        #             )
+                        )
+                        print("Instate ")
+                        invPrd.save()
 
-        #             purchase.save()
+                    for i in newPrdsData:
 
-        #             for i in data:
-        #                 prd = product.objects.filter(
-        #                     user_linked=request.user,
-        #                     product_name=i[0]
-        #                 )
+                        prd = product(
+                            user_linked = request.user,
+                            product_name = i[0],
+                            product_description = i[6],
+                            product_quantity = int(i[1]),
+                            product_type = i[7],
+                            product_weight_category = i[8],
+                            product_weight_per_quantity = int(i[9]),
+                            product_price = float(i[2]) + ((float(i[2]) * int(i[3])) / 100) + ((float(i[2]) * int(i[4])) / 100)
+                        )
 
-        #                 qty = prd[0].product_quantity if len(prd) != 0 else 0
+                        prd.save()
 
+                        invPrd = inStatePurchase(
+                            instateInv = purchase,
+                            product = i[0],
+                            product_price = float(i[2]),
+                            product_sgst = str(i[3]),
+                            product_cgst = str(i[4]),
+                            quantity = int(i[1]),
+                            total = float(i[5])
 
-        #                 obj,created = product.objects.update_or_create(
-        #                     user_linked=request.user,
-        #                     product_name=i[0],
-        #                     product_description = '',
-        #                     defaults={
-        #                         'product_quantity':qty+int(i[1]),
-        #                         'product_price':float(i[2])
-        #                         }
-        #                 )
-                        
+                        )
+                        print("Instate ")
+                        invPrd.save()
+                print("all good")
+                return Response({'message':'all good'},status=status.HTTP_200_OK)
+                    
+            except Exception as e:
+                return Response({'error':e},status=status.HTTP_400_BAD_REQUEST)
 
-        #                 invProduct = inStatePurchase(
-        #                     instateInv = purchase,
-        #                     product = i[0],
-        #                     product_price = float(i[2]),
-        #                     product_sgst = str(i[3]),
-        #                     product_cgst = str(i[4]),
-        #                     quantity = int(i[1]),
-        #                     total = float(i[5])
-        #                 )
-
-        #                 invProduct.save()
-
-
-            return Response({'message':'all good'},status=status.HTTP_200_OK)
-                
-        except Exception as e:
-            return Response({'error':e},status=status.HTTP_400_BAD_REQUEST)
-
-        # else:
-        #     return Response({'Bad Request':'Supplier Not Found'},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'Bad Request':'Supplier Not Found'},status=status.HTTP_400_BAD_REQUEST)

@@ -2,6 +2,7 @@ import { GET_PURCHASE,CREATE_PURCHASE} from "../actions/types";
 const initialState = {
     instate_data: [],
     outstate_data: [],
+    invCreated:false,
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -10,13 +11,14 @@ export default function(state=initialState,action){
         case GET_PURCHASE:
             return{
                 ...state,
-                ...action.payload
+                ...action.payload,
+                invCreated:false
             };
         
         case CREATE_PURCHASE:
             return{
                 ...state,
-                purchaseDetail: [...state.purchaseDetail,action.payload]
+                invCreated:true
             }
         default:
             return state

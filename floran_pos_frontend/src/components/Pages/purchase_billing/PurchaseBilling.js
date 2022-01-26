@@ -36,6 +36,7 @@ export class PurchaseBilling extends Component {
     prdName: "",
     prdQty: 0,
     prdPrice: 0,
+    prdDesc: "",
     prdIgst: "",
     prdSgst: "",
     prdCgst: "",
@@ -44,6 +45,8 @@ export class PurchaseBilling extends Component {
     product_type: "",
     product_weight_category: "",
     product_weight_per_quantity: 0,
+
+    loading: false,
   };
 
   static propTypes = {
@@ -96,7 +99,9 @@ export class PurchaseBilling extends Component {
       console.log("Bill");
       console.log(Bill);
       this.props.createPurchase(Bill);
-
+      this.setState({
+        loading: true
+      })
       // this.setState({
       //   submitted: true,
       // });
@@ -293,11 +298,19 @@ export class PurchaseBilling extends Component {
       if (this.state.new_prd) {
         let tempNewData = [];
         tempNewData.push(this.state.prdName);
-        tempNewData.push("Description Pending...");
+        tempNewData.push(this.state.prdQty);
+        tempNewData.push(this.state.prdPrice);
+        if (this.state.bill_type === "instate") {
+          tempNewData.push(this.state.prdSgst);
+          tempNewData.push(this.state.prdCgst);
+        } else if (this.state.bill_type === "outstate") {
+          tempNewData.push(this.state.prdIgst);
+        }
+        tempNewData.push(this.state.totalPrice);
+        tempNewData.push(this.state.prdDesc);
         tempNewData.push(this.state.product_type);
         tempNewData.push(this.state.product_weight_category);
         tempNewData.push(this.state.product_weight_per_quantity);
-        tempNewData.push(this.state.prdPrice);
 
         this.setState({
           newPrds: [...this.state.newPrds, tempNewData],
@@ -307,7 +320,7 @@ export class PurchaseBilling extends Component {
         this.setState({
           prds: [...this.state.prds, tempRowData],
           prdRef: [...this.state.newPrdRef, this.state.prdName],
-        })
+        });
       }
 
       console.log(tempRowData);
@@ -319,6 +332,7 @@ export class PurchaseBilling extends Component {
         prdName: "",
         prdQty: 0,
         prdPrice: 0,
+        prdDesc: "",
         prdIgst: "",
         prdSgst: "",
         prdCgst: "",
@@ -361,7 +375,7 @@ export class PurchaseBilling extends Component {
   };
 
   render() {
-    if (this.state.submitted === true) {
+    if (this.props.invCreated === true) {
       this.props.history.push("/purchase");
     }
 
@@ -377,6 +391,7 @@ export class PurchaseBilling extends Component {
     const prdName = this.state.prdName;
     const prdQty = this.state.prdQty;
     const prdPrice = this.state.prdPrice;
+    const prdDesc = this.state.prdDesc;
     const product_weight_per_quantity = this.state.product_weight_per_quantity;
 
     return (
@@ -530,12 +545,18 @@ export class PurchaseBilling extends Component {
                   <div className="row">
                     <div className="col-md-3">
                       <div className="row">
-                        <button
-                          className="btn btn-primary"
-                          onClick={this.createBill}
-                        >
-                          Create Bill
-                        </button>
+                        {this.state.loading ? (
+                          <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
+                        ) : (
+                          <button
+                            className="btn btn-primary"
+                            onClick={this.createBill}
+                          >
+                            Create Bill
+                          </button>
+                        )}
                       </div>
                     </div>
                     <div className="col-md-2"></div>
@@ -703,6 +724,21 @@ export class PurchaseBilling extends Component {
                     {this.state.new_prd ? (
                       <div>
                         <div className="form-group row">
+                          <label className="col-sm-12 col-form-label">
+                            Product Description
+                          </label>
+                          <div className="col-sm-12">
+                            <textarea
+                              className="form-control"
+                              placeholder="Description"
+                              rows={10}
+                              name="prdDesc"
+                              value={prdDesc}
+                              onChange={this.addPrdOnChange}
+                            ></textarea>
+                          </div>
+                        </div>
+                        <div className="form-group row">
                           <label className="col-sm-3 col-form-label">
                             Product Type
                           </label>
@@ -816,11 +852,11 @@ export class PurchaseBilling extends Component {
                             <input
                               type="number"
                               className="form-control"
+                              placeholder="Product Weight / Pieces per qty"
                               name="product_weight_per_quantity"
                               value={product_weight_per_quantity}
                               onChange={this.addPrdOnChange}
                             />{" "}
-                            {/* value={product_weight_per_quantity} onChange={this.onChange} */}
                           </div>
                         </div>
                       </div>
@@ -855,6 +891,7 @@ const mapStatetoProps = (state) => ({
   suppliers: state.supplier.suppliers,
   products: state.product.products,
   profile: state.auth.user_profile,
+  invCreated: state.purchase.invCreated,
 });
 
 export default connect(mapStatetoProps, {
