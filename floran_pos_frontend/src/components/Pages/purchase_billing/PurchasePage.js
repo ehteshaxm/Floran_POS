@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getPurchase } from '../../../actions/purchase';
+import { getPurchase, instatePurchaseDetail } from '../../../actions/purchase';
 import { getSuppliers } from '../../../actions/supplier';
 export class PurchasePage extends Component {
 
@@ -22,9 +22,17 @@ export class PurchasePage extends Component {
     supplierName = (id) => {
       var supplier_name = ''
       this.props.suppliers.map((sdata,index) => (
-        parseInt(sdata.id) === parseInt(id) ? supplier_name = sdata.name : 'pr'
+        parseInt(sdata.id) === parseInt(id) ? supplier_name = sdata.name : ''
       ))
       return supplier_name
+    }
+
+    redirectToOutInvDetail = (id) => {
+      this.props.history.push(`/purchase/outstate/${id}`);
+    }
+
+    redirectToInInvDetail = (id) => {
+      this.props.history.push(`/purchase/instate/${id}`);
     }
 
     render() {
@@ -65,7 +73,7 @@ export class PurchasePage extends Component {
                           <tbody className='table-light'>
                             {
                             this.props.instate_data.map((data,index) => (
-                              <tr key={index}>
+                              <tr key={index} onClick={() => this.redirectToInInvDetail(data.id)}>
                                 <td>
                                   {data.invNumber}
                                 </td>
@@ -112,7 +120,7 @@ export class PurchasePage extends Component {
                           <tbody className='table-light'>
                          {
                           this.props.outstate_data.map((data,index) => (
-                            <tr key={index}>
+                            <tr key={index} onClick={() => this.redirectToOutInvDetail(data.id)}>
                             <td>
                               {data.invNumber}
                             </td>
@@ -148,4 +156,4 @@ const mapStateToProps = state => ({
   suppliers: state.supplier.suppliers
 })
 
-export default connect(mapStateToProps, {getPurchase,getSuppliers})(PurchasePage)
+export default connect(mapStateToProps, {getPurchase,getSuppliers,instatePurchaseDetail})(PurchasePage)

@@ -2,8 +2,7 @@
 import {
   GET_PURCHASE,
   CREATE_PURCHASE,
-  DELETE_PURCHASE,
-  UPDATE_PURCHASE,
+  PURCHASE_DETAIL,
   BASE_URL,
 } from "../actions/types";
 import axios from "axios";
@@ -33,3 +32,21 @@ export const createPurchase = (Bill) => (dispatch, getState) => {
       console.log(err);
     });
 };
+
+export const instatePurchaseDetail = (id) => (dispatch,getState) => {
+  axios.get(`${url}instate/${id}`,tokenConfig(getState)).then((res) => {
+    dispatch({
+      type:PURCHASE_DETAIL,
+      payload: res.data
+    })
+  }).catch((err) => console.log(err))
+}
+
+export const outstatePurchaseDetail = (id) => (dispatch,getState) => {
+  axios.get(`${url}outstate/${id}`,tokenConfig(getState)).then((res) => {
+    dispatch({
+      type:PURCHASE_DETAIL,
+      payload: res.data
+    })
+  }).catch((err) => console.log(err))
+}

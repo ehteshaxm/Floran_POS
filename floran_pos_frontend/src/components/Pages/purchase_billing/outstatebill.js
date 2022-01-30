@@ -1,134 +1,209 @@
-import React, { Component } from 'react'
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { outstatePurchaseDetail } from "../../../actions/purchase";
+import { getSuppliers } from "../../../actions/supplier";
 export class outstatebill extends Component {
-    render() {
-        return (
-            <div className='col-12'>
-                <div className="row">
-                    <div className="col-12">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-md-6 col-12">
-                                        <h3>Supplier Detail</h3>
-                                        <h6>Name : Masters Computer Enterprises</h6>
-                                        <h6>
-                                            Address : <br />
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui harum fugit cumque aliquid, perspiciatis tenetur deleniti assumenda molestias ratione recusandae nobis nostrum! Beatae facilis obcaecati earum consequatur nesciunt magnam voluptatem.
-                                        </h6>
-                                        <h6>Contact : 7039691123</h6>
-                                        <h6>GST Number : 27AEQPK1367J1Z2</h6>
-                                    </div>
-                                    <div className="col-md-6 col-12">
-                                        <h6>Invoice : 1</h6>
-                                        <h6>Date : July,10,2021</h6>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <h3>Item Detials</h3>
-                                    </div>
-                                    <div className="col-12 table-responsive">
-                                        <table className="table">
-                                            <thead className="table-light">
-                                                <tr>
-                                                    <th>S/N</th>
-                                                    <th>Product name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Unit price</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Laptop</td>
-                                                    <td>1</td>
-                                                    <td>100.0</td>
-                                                    <td>100.0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td></td>
-                                                    <th>Total</th>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>100.0</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <table className="table table-bordered">
-                                            <thead className="table-light">
-                                                <tr>
-                                                    <th>Product Name</th>
-                                                    <th className="text-center" >Taxable <br />Value</th>
-                                                    <th>
-                                                        <table className="table table-bordered ">
-                                                            <tr >
-                                                                <th className="text-center" colspan="2">Central Tax</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th >Rate</th>
-                                                                <th >Amount</th>
-                                                            </tr>
-                                                        </table>
-                                                    </th>
-                                                    <th>
-                                                        <table className="table ">
-                                                            <tr>
-                                                                <th className="text-center" colspan="2">State Tax</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Rate</th>
-                                                                <th>Amount</th>
-                                                            </tr>
-                                                        </table>
-                                                    </th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                    <td>Product Name</td>
-                                                    <td className="text-center" >Taxable <br />Value</td>
-                                                    <td>
-                                                        <table className="table table-bordered ">
-                                                            <tr >
-                                                                <td className="text-center" colspan="2">Central Tax</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Rate</td>
-                                                                <td>Amount</td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                    <td>
-                                                        <table className="table ">
-                                                            <tr>
-                                                                <td className="text-center" colspan="2">State Tax</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Rate</td>
-                                                                <td>Amount</td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
+  static propTypes = {
+    invoiceDetail: PropTypes.array.isRequired,
+    invoicePrds: PropTypes.array.isRequired,
+    supplier: PropTypes.array.isRequired,
+    instatePurchaseDetail: PropTypes.func.isRequired,
+    total_cost: PropTypes.number.isRequired,
+    total_cgst: PropTypes.number.isRequired,
+    total_sgst: PropTypes.number.isRequired,
+  };
+
+  componentDidMount() {
+    this.props.outstatePurchaseDetail(this.props.match.params.id);
+    if (this.props.supplier.length === 0) {
+      this.props.getSuppliers();
+      console.log("Supplier empty");
     }
+  }
+
+  supplierName = (id) => {
+    var supplierData;
+
+    this.props.supplier.map((sdata, index) =>
+      parseInt(sdata.id) === parseInt(id) ? (supplierData = sdata) : {}
+    );
+    return supplierData;
+  };
+
+  render() {
+    let invoiceDetail = this.props.invoiceDetail;
+    if (invoiceDetail.length === 0 || this.props.supplier.length === 0) {
+      console.log("Fukc ", invoiceDetail.length);
+      return <h1>Loading..</h1>;
+    } else {
+      let supplierData = this.supplierName(
+        this.props.invoiceDetail[0].supplier_id
+      );
+      console.log(supplierData);
+      return (
+        <div className="col-12">
+          <div className="row">
+            <div className="col-12">
+              <div className="card">
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-12">
+                      <h3>
+                        <label>Supplier Detail</label>
+                      </h3>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <h6>Name : {supplierData.name}</h6>
+                      <h6>
+                        Address : <br />
+                        {supplierData.address}
+                      </h6>
+                      <h6>Contact : {supplierData.mobile_number}</h6>
+                      <h6>GST Number : {supplierData.gst_number}</h6>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <h6>Invoice : 1</h6>
+                      <h6>Date : July,10,2021</h6>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <h3>Item Detials</h3>
+                    </div>
+                    <div className="col-12 table-responsive">
+                      <table className="table table-bordered table-hover">
+                        <thead className="thead-light">
+                          <tr>
+                            <th>S/N</th>
+                            <th>Product name</th>
+                            <th>Quantity</th>
+                            <th>Unit price</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.props.invoicePrds.map((value, index) => (
+                            <tr key={index}>
+                              <td>{index + 1}</td>
+                              <td>{value.product}</td>
+                              <td>{value.quantity}</td>
+                              <td>{value.product_price}</td>
+                              <td>{value.product_price * value.quantity}</td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td></td>
+                            <th>Total</th>
+                            <td></td>
+                            <td></td>
+                            <td>{this.props.total_cost}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <h3>Purchase Detail with Gst</h3>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <table className="table table-bordered">
+                        <thead className="thead-light">
+                          <tr>
+                            <th>Product Name</th>
+                            <th className="text-center">
+                              Taxable <br />
+                              Value
+                            </th>
+                            <th className="customTh">
+                              <table className="table table-bordered customTable">
+                                <tr>
+                                  <th className="text-center" colSpan="2">
+                                    Integrated Tax
+                                  </th>
+                                </tr>
+                                <tr>
+                                  <th>Rate</th>
+                                  <th>Amount</th>
+                                </tr>
+                              </table>
+                            </th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.props.invoicePrds.map((data, index) => (
+                            <tr key={index}>
+                              <td>{data.product}</td>
+                              <td>{data.product_price}</td>
+                              <td className="customTh">
+                                <table className="table customTable2">
+                                  <tr>
+                                    <td className="customTh2">
+                                      {data.product_gst}%
+                                    </td>
+                                    <td className="">
+                                      {(data.product_price *
+                                        data.quantity *
+                                        parseInt(data.product_gst)) /
+                                        100}
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                              <td>{data.total}</td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td>Total</td>
+                            <th>{this.props.total_cost}</th>
+                            <th className="customTh">
+                              <table className="table customTable">
+                                <tr>
+                                  <th className="inner_table1 customTh2"></th>
+                                  <th className="inner_table2">
+                                    {this.props.total_igst}
+                                  </th>
+                                </tr>
+                              </table>
+                            </th>
+                            <th>{this.props.invoiceDetail[0].total_amount}</th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <hr></hr>
+                  <div className="row">
+                    <div className="col-12">
+                      <h2>
+                        Grant Total : {this.props.invoiceDetail[0].total_amount}
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
 }
 
-export default outstatebill
+const mapStateToProps = (state) => ({
+  invoiceDetail: state.purchase.invoiceDetail,
+  invoicePrds: state.purchase.invoicePrds,
+  total_cost: state.purchase.total_cost,
+  total_cgst: state.purchase.total_cgst,
+  total_sgst: state.purchase.total_sgst,
+  supplier: state.supplier.suppliers,
+});
+
+export default connect(mapStateToProps, {
+  outstatePurchaseDetail,
+  getSuppliers,
+})(outstatebill);

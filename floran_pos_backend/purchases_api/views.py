@@ -1,10 +1,63 @@
-from math import prod
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions,status
 from .models import *
 from supplier_api.models import supplier
 from product_api.models import product
+
+
+class singleInstatePurchaseDataApi(APIView):
+    permission_classess = [permissions.IsAuthenticated]
+
+    def get(self,request,pk=None):
+        print(request.user)
+        print(pk)
+
+        invoiceDetail = AllinStatePurchase.objects.filter(pk=pk,user=request.user)
+        print(invoiceDetail)
+        print("=======================")
+        invoicePrds = inStatePurchase.objects.filter(instateInv=invoiceDetail.get())
+        invPrds = invoicePrds.values()
+        total_cost,total_cgst,total_sgst = 0,0,0
+
+        for i in invoicePrds:
+            total_cost += i.total_price
+            total_cgst += i.cgst_price
+            total_sgst += i.sgst_price
+
+        context = {
+            "invoiceDetail":invoiceDetail.values(),
+            "invoicePrds":invPrds,
+            "total_cost": total_cost,
+            "total_cgst": total_cgst,
+            "total_sgst": total_sgst,
+        }
+        
+        print(context)
+        return Response(context,status=status.HTTP_200_OK)
+class singleOutstatePurchaseDataApi(APIView):
+    permission_classess = [permissions.IsAuthenticated]
+
+    def get(self,request,pk=None):
+        
+        invoiceDetail = AllOutStatePurchase.objects.filter(pk=pk,user=request.user)
+        invoicePrds = OutStatePurchase.objects.filter(outstateInv=invoiceDetail.get())
+        invPrds = invoicePrds.values()
+        total_cost,total_igst = 0,0
+
+        for i in invoicePrds:
+            total_cost += i.total_price
+            total_igst += i.gst_price
+
+        context = {
+            "invoiceDetail":invoiceDetail.values(),
+            "invoicePrds":invPrds,
+            "total_cost": total_cost,
+            "total_igst": total_igst,
+        }
+            
+        return Response(context,status=status.HTTP_200_OK)
+
 
 class purchaseApi(APIView):
     permission_classes = [

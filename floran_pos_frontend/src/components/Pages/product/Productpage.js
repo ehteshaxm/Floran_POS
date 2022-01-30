@@ -16,7 +16,9 @@ export class Productpage extends Component {
   };
 
   componentDidMount() {
-    this.props.getProducts();
+    if(this.props.products.length === 0){
+      this.props.getProducts();
+    }
   }
 
   redirectToProductDetail = (product) => {

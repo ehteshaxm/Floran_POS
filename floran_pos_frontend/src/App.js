@@ -1,15 +1,11 @@
 import React, { Component, Fragment } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
-import { Provider } from 'react-redux';
-import store from './store'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
 
-import { loadProfile, loadUser } from './actions/auth';
+import { loadProfile, loadUser } from "./actions/auth";
 
-import Navbar from './components/commons/Navbar'
+import Navbar from "./components/commons/Navbar";
 import Mainpage from "./components/Pages/Mainpage";
 import ProductCreate from "./components/Pages/product/ProductCreate";
 import ProductDetail from "./components/Pages/product/ProductDetail";
@@ -28,6 +24,7 @@ import Create_order_page from "./components/Pages/restaurant_inventory/Create_or
 import OrderPage from "./components/Pages/restaurant_inventory/OrderPage";
 import Dashboard from "./components/Pages/dashboard/Dashboard";
 import FloorDashboard from "./components/Pages/floor inventory dashboard/FloorDashboard";
+import instatebill  from "./components/Pages/purchase_billing/instatebill";
 
 export class App extends Component {
   async componentDidMount() {
@@ -41,7 +38,7 @@ export class App extends Component {
         <Router>
           <Fragment>
             <Switch>
-            <Route exact path="/" component={Mainpage}></Route>
+              <Route exact path="/" component={Mainpage}></Route>
               <Route path="/login" component={Login}></Route>
               <Route path="/register" component={Register}></Route>
               <Route path="/createHotel" component={CreateHotelDetail}></Route>
@@ -73,24 +70,59 @@ export class App extends Component {
                     component={ProductDetail}
                   ></AuthReqRoute>
 
-                  <AuthReqRoute exact path="/supplier" component={SupplierPage}></AuthReqRoute>
-                  <AuthReqRoute path="/supplier/create" component={SupplierCreate}></AuthReqRoute>
-                  
-                  <AuthReqRoute exact path="/purchase" component={PurchasePage}></AuthReqRoute>
-                  <AuthReqRoute exact path="/purchase/bill" component={PurchaseBilling}></AuthReqRoute>
-                  <AuthReqRoute exact path="/purchase/outstate/inv" component={outstatebill}></AuthReqRoute>
-                  <AuthReqRoute exact path="/restaurant/inventory" component={Inventory}></AuthReqRoute>
-                  <AuthReqRoute exact path="/restaurant/order" component={OrderPage}></AuthReqRoute>
-                  <AuthReqRoute exact path="/restaurant/order/create" component={Create_order_page}></AuthReqRoute>
+                  <AuthReqRoute
+                    exact
+                    path="/supplier"
+                    component={SupplierPage}
+                  ></AuthReqRoute>
+                  <AuthReqRoute
+                    path="/supplier/create"
+                    component={SupplierCreate}
+                  ></AuthReqRoute>
+
+                  <AuthReqRoute
+                    exact
+                    path="/purchase"
+                    component={PurchasePage}
+                  ></AuthReqRoute>
+                  <AuthReqRoute
+                    exact
+                    path="/purchase/bill"
+                    component={PurchaseBilling}
+                  ></AuthReqRoute>
+                   <AuthReqRoute
+                    exact
+                    path="/purchase/outstate/:id"
+                    component={outstatebill}
+                  ></AuthReqRoute>
+                   <AuthReqRoute
+                    exact
+                    path="/purchase/instate/:id"
+                    component={instatebill}
+                  ></AuthReqRoute>
+                  <AuthReqRoute
+                    exact
+                    path="/restaurant/inventory"
+                    component={Inventory}
+                  ></AuthReqRoute>
+                  <AuthReqRoute
+                    exact
+                    path="/restaurant/order"
+                    component={OrderPage}
+                  ></AuthReqRoute>
+                  <AuthReqRoute
+                    exact
+                    path="/restaurant/order/create"
+                    component={Create_order_page}
+                  ></AuthReqRoute>
                 </div>
               </Fragment>
             </Switch>
           </Fragment>
         </Router>
       </Provider>
-    )
+    );
   }
 }
 
-export default App
-
+export default App;

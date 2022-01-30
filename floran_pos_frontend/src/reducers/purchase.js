@@ -1,7 +1,13 @@
-import { GET_PURCHASE,CREATE_PURCHASE} from "../actions/types";
+import { GET_PURCHASE,CREATE_PURCHASE,PURCHASE_DETAIL} from "../actions/types";
 const initialState = {
     instate_data: [],
     outstate_data: [],
+    invoiceDetail:[],
+    invoicePrds: [],
+    total_cost:0,
+    total_cgst:0,
+    total_sgst:0,
+    total_igst:0,
     invCreated:false,
 }
 
@@ -19,6 +25,12 @@ export default function(state=initialState,action){
             return{
                 ...state,
                 invCreated:true
+            }
+        
+        case PURCHASE_DETAIL:
+            return{
+                ...state,
+                ...action.payload
             }
         default:
             return state

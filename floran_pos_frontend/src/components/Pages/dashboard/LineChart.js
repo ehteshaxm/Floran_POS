@@ -95,7 +95,7 @@ export class LineChart extends Component {
                   </select>
                 </div>
                 <div className="col-12">
-                <Line data={data} options={options} width='100vh' height='55vh' />
+                <Line data={data} options={options} width='100vh' height='45vh' />
                 </div>
             </div>
           </div>
