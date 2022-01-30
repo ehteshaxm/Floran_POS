@@ -37,9 +37,9 @@ export class PurchaseBilling extends Component {
     prdQty: 0,
     prdPrice: 0,
     prdDesc: "",
-    prdIgst: "",
-    prdSgst: "",
-    prdCgst: "",
+    prdIgst: "none",
+    prdSgst: "none",
+    prdCgst: "none",
     totalPrice: 0,
 
     product_type: "",
@@ -224,7 +224,7 @@ export class PurchaseBilling extends Component {
       this.state.prdName !== "" &&
       this.state.prdQty !== 0 &&
       this.state.prdPrice !== 0 &&
-      this.state.totalPrice !== 0
+      this.state.totalPrice !== 0 
     ) {
       if (this.state.new_prd) {
         if (
@@ -333,9 +333,9 @@ export class PurchaseBilling extends Component {
         prdQty: 0,
         prdPrice: 0,
         prdDesc: "",
-        prdIgst: "",
-        prdSgst: "",
-        prdCgst: "",
+        prdIgst: "none",
+        prdSgst: "none",
+        prdCgst: "none",
         totalPrice: 0,
         new_prd: false,
 
@@ -661,7 +661,7 @@ export class PurchaseBilling extends Component {
                               id="3"
                               name="prdSgst"
                               onChange={this.addPrdOnChange}
-                              defaultValue="none"
+                              value={this.state.prdSgst}
                             >
                               <option value="none" disabled>
                                 Select option
@@ -683,7 +683,7 @@ export class PurchaseBilling extends Component {
                               id="3"
                               name="prdCgst"
                               onChange={this.addPrdOnChange}
-                              defaultValue="none"
+                              value={this.state.prdCgst}
                             >
                               <option value="none" disabled>
                                 Select option
@@ -707,7 +707,7 @@ export class PurchaseBilling extends Component {
                             id="3"
                             name="prdIgst"
                             onChange={this.addPrdOnChange}
-                            defaultValue="none"
+                            value={this.state.prdIgst}
                           >
                             <option value="none" disabled>
                               Select option
