@@ -138,7 +138,7 @@ export class outstatebill extends Component {
                           {this.props.invoicePrds.map((data, index) => (
                             <tr key={index}>
                               <td>{data.product}</td>
-                              <td>{data.product_price}</td>
+                              <td>{data.product_price * data.quantity}</td>
                               <td className="customTh">
                                 <table className="table customTable2">
                                   <tr>
