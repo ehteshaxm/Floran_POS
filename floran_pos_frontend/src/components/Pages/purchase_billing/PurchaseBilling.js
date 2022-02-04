@@ -83,7 +83,7 @@ export class PurchaseBilling extends Component {
       prds,
       grandtotal,
     } = this.state;
-    var check = true;
+    var check = this.validate();
     if (check) {
       const Bill = {
         bill_type,
